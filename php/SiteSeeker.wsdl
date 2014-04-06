@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="SiteSeeker"
+ targetNamespace="urn:siteseeker"
+ xmlns:tns="urn:siteseeker"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:ess="urn:siteseeker"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+ <schema targetNamespace="urn:siteseeker"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ess="urn:siteseeker"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <complexType name="FilterArray">
+   <sequence>
+     <element name="v" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="FilterNum">
+   <sequence>
+     <element name="v" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="FilterBool">
+   <sequence>
+     <element name="v" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="DateRange">
+   <sequence>
+     <element name="s" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="e" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="MetaAttr">
+   <sequence>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfMetaAttr">
+   <sequence>
+     <element name="MetaAttribute" type="ess:MetaAttr" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="Attachments">
+   <sequence>
+     <element name="nAttachments" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="attachments" type="ess:Hit" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SearchParameter">
+   <sequence>
+     <element name="key" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="doSearchRequest">
+   <sequence>
+     <element name="query" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="ilang" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="category" type="ess:FilterArray" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="language" type="ess:FilterNum" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="format" type="ess:FilterNum" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="stemming" type="ess:FilterBool" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="date" type="ess:DateRange" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="sortOrder" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="batchNumber" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hitsIds" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="nHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="doSearchRequest3">
+   <complexContent>
+    <extension base="ess:doSearchRequest">
+     <sequence>
+     <element name="userIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="responseId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="spellSuggestion" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="userTokens" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="doSearchRequest5">
+   <complexContent>
+    <extension base="ess:doSearchRequest3">
+     <sequence>
+     <element name="parameters" type="ess:SearchParameter" minOccurs="0" maxOccurs="unbounded"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="doSearchRequest6">
+   <complexContent>
+    <extension base="ess:doSearchRequest5">
+     <sequence>
+     <element name="age" type="ess:FilterNum" minOccurs="0" maxOccurs="1" nillable="true"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="Hit">
+   <sequence>
+     <element name="title" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="metaDescription" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="specialText" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="sourceLink" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="sourceLinkHighlighted" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="contextLink" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="dcIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="teaserImageUrl" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="pageId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="inFrame" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="doctypeId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="categoryIds" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="modDate" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="size" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="langId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hitNr" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="rank" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="metaAttributes" type="ess:ArrayOfMetaAttr" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="matchesQuery" type="xsd:boolean" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="attachments" type="ess:Attachments" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ShortHit">
+   <sequence>
+     <element name="title" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="sourceLink" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="dcIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="pageId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="inFrame" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="doctypeId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="categoryIds" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="modDate" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="size" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="langId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hitNr" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="rank" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Category">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nDocs" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="groupId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="groupName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="HitCategory">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nameHighlighted" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nDocs" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="groupId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="groupName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="nHitsInBatch" type="xsd:int" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="HitPartition">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nDocs" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="nHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Bet">
+   <sequence>
+     <element name="title" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="keywords" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="isExternal" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="langId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="betNr" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="type" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="Spell">
+   <sequence>
+     <element name="spell" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="htmlspell" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="autoCorrect" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="QueryRefinement">
+   <sequence>
+     <element name="query" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="newTerms" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfQueryRefinements">
+   <sequence>
+     <element name="queryRefinements" type="ess:QueryRefinement" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfHit">
+   <sequence>
+     <element name="Hit" type="ess:Hit" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfShortHit">
+   <sequence>
+     <element name="Hit" type="ess:ShortHit" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfHitCategory">
+   <sequence>
+     <element name="HitCategory" type="ess:HitCategory" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfHitPartition">
+   <sequence>
+     <element name="HitPartition" type="ess:HitPartition" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfBet">
+   <sequence>
+     <element name="Bet" type="ess:Bet" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfSpell">
+   <sequence>
+     <element name="Spell" type="ess:Spell" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="Time">
+   <sequence>
+     <element name="t" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="SearchResponse">
+   <sequence>
+     <element name="query" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="nHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="first" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="nHitsBatch" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="batchNumber" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="nBatch" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hits" type="ess:ArrayOfHit" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="imageHits" type="ess:ArrayOfHit" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="cats" type="ess:ArrayOfHitCategory" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="matchingCats" type="ess:ArrayOfHitCategory" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="languages" type="ess:ArrayOfHitPartition" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="docTypes" type="ess:ArrayOfHitPartition" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ages" type="ess:ArrayOfHitPartition" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="bets" type="ess:ArrayOfBet" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="spells" type="ess:ArrayOfSpell" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="queryRefinements" type="ess:ArrayOfQueryRefinements" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="responseId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="indexLastModified" type="ess:Time" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ShortSearchResponse">
+   <sequence>
+     <element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="nHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hits" type="ess:ArrayOfShortHit" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="bets" type="ess:ArrayOfBet" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="spells" type="ess:ArrayOfSpell" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="DocType">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="key" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nrHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Lang">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="key" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="nrHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Age">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="key" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="date" type="ess:DateRange" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="nrHits" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="getParamRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="lastQuery" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="ilang" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="getCategories" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="getBestBets" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="getDoctypes" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="getDates" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="getLanguages" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="getParamRequest6">
+   <complexContent>
+    <extension base="ess:getParamRequest">
+     <sequence>
+     <element name="getAges" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="ArrayOfCategory">
+   <sequence>
+     <element name="Category" type="ess:Category" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfDocType">
+   <sequence>
+     <element name="DocType" type="ess:DocType" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfLang">
+   <sequence>
+     <element name="Lang" type="ess:Lang" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ArrayOfAge">
+   <sequence>
+     <element name="Age" type="ess:Age" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="DateInfo">
+   <sequence>
+     <element name="s" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="e" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="unknownDateExists" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="ParamResponse">
+   <sequence>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="notUpdated" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="time" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="cats" type="ess:ArrayOfCategory" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="bets" type="ess:ArrayOfBet" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="docs" type="ess:ArrayOfDocType" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="dates" type="ess:DateInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ages" type="ess:ArrayOfAge" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="langs" type="ess:ArrayOfLang" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="getStatsAccessRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="ilang" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="StatsAccessResponse">
+   <sequence>
+     <element name="sessionKey" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="infoUrl" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="getCachedPageRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="ilang" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="query" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="getCachedPageRequest3">
+   <complexContent>
+    <extension base="ess:getCachedPageRequest">
+     <sequence>
+     <element name="userIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="responseId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hitNr" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="userTokens" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="getCachedPageRequest5">
+   <complexContent>
+    <extension base="ess:getCachedPageRequest3">
+     <sequence>
+     <element name="parameters" type="ess:SearchParameter" minOccurs="0" maxOccurs="unbounded"/>
+     </sequence>
+    </extension>
+   </complexContent>
+  </complexType>
+  <complexType name="Thumbnail">
+   <sequence>
+     <element name="image" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" nillable="false"/>
+     <element name="mimeType" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="CachedPageResponse">
+   <sequence>
+     <element name="nmarks" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="page" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="query" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="dcIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="thumbnail" type="ess:Thumbnail" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="doClickRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="userIdentifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+     <element name="responseId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hitNr" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="mode" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClickResponse">
+   <sequence>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="QueryCompletionRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="parameters" type="ess:SearchParameter" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="QueryCompletionResponse">
+   <sequence>
+     <element name="jsonResponse" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="NotifyRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="urls" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="NotifyResponse">
+   <sequence>
+     <element name="ok" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="StatisticsRequest">
+   <sequence>
+     <element name="version" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="userTokens" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="parameters" type="ess:SearchParameter" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="StatisticsResponse">
+   <sequence>
+     <element name="jsonResponse" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <!-- operation request element -->
+  <element name="doSearch">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:doSearchRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doSearchResponse">
+   <complexType>
+    <sequence>
+     <element name="SearchResponse" type="ess:SearchResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="doShortSearch">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:doSearchRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doShortSearchResponse">
+   <complexType>
+    <sequence>
+     <element name="SearchResponse" type="ess:ShortSearchResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getParam">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:getParamRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getParamResponse">
+   <complexType>
+    <sequence>
+     <element name="ParamResponse" type="ess:ParamResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getStatsAccess">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:getStatsAccessRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getStatsAccessResponse">
+   <complexType>
+    <sequence>
+     <element name="StatsAccessResponse" type="ess:StatsAccessResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getCachedPage">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:getCachedPageRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getCachedPageResponse">
+   <complexType>
+    <sequence>
+     <element name="CachedPageResponse" type="ess:CachedPageResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="doQueryCompletion">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:QueryCompletionRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doQueryCompletionResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="ess:QueryCompletionResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="doNotify">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:NotifyRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doNotifyResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="ess:NotifyResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="doStatistics">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:StatisticsRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doStatisticsResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="ess:StatisticsResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="doClick">
+   <complexType>
+    <sequence>
+     <element name="request" type="ess:doClickRequest" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="doClickResponse">
+   <complexType>
+    <sequence>
+     <element name="ClickResponse" type="ess:ClickResponse" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="Ping">
+   <complexType>
+    <sequence>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="PingResponse">
+   <complexType>
+    <sequence>
+     <element name="r" type="xsd:boolean" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+ </schema>
+
+</types>
+
+<message name="doSearch">
+ <part name="parameters" element="ess:doSearch"/>
+</message>
+
+<message name="doSearchResponse">
+ <part name="parameters" element="ess:doSearchResponse"/>
+</message>
+
+<message name="doShortSearch">
+ <part name="parameters" element="ess:doShortSearch"/>
+</message>
+
+<message name="doShortSearchResponse">
+ <part name="parameters" element="ess:doShortSearchResponse"/>
+</message>
+
+<message name="getParam">
+ <part name="parameters" element="ess:getParam"/>
+</message>
+
+<message name="getParamResponse">
+ <part name="parameters" element="ess:getParamResponse"/>
+</message>
+
+<message name="getStatsAccess">
+ <part name="parameters" element="ess:getStatsAccess"/>
+</message>
+
+<message name="getStatsAccessResponse">
+ <part name="parameters" element="ess:getStatsAccessResponse"/>
+</message>
+
+<message name="getCachedPage">
+ <part name="parameters" element="ess:getCachedPage"/>
+</message>
+
+<message name="getCachedPageResponse">
+ <part name="parameters" element="ess:getCachedPageResponse"/>
+</message>
+
+<message name="doQueryCompletion">
+ <part name="parameters" element="ess:doQueryCompletion"/>
+</message>
+
+<message name="doQueryCompletionResponse">
+ <part name="parameters" element="ess:doQueryCompletionResponse"/>
+</message>
+
+<message name="doNotify">
+ <part name="parameters" element="ess:doNotify"/>
+</message>
+
+<message name="doNotifyResponse">
+ <part name="parameters" element="ess:doNotifyResponse"/>
+</message>
+
+<message name="doStatistics">
+ <part name="parameters" element="ess:doStatistics"/>
+</message>
+
+<message name="doStatisticsResponse">
+ <part name="parameters" element="ess:doStatisticsResponse"/>
+</message>
+
+<message name="doClick">
+ <part name="parameters" element="ess:doClick"/>
+</message>
+
+<message name="doClickResponse">
+ <part name="parameters" element="ess:doClickResponse"/>
+</message>
+
+<message name="PingRequest">
+ <part name="parameters" element="ess:Ping"/>
+</message>
+
+<message name="PingResponse">
+ <part name="parameters" element="ess:PingResponse"/>
+</message>
+
+<portType name="SiteSeekerPortType">
+ <operation name="doSearch">
+  <documentation>Service definition of function ess__doSearch</documentation>
+  <input message="tns:doSearch"/>
+  <output message="tns:doSearchResponse"/>
+ </operation>
+ <operation name="doShortSearch">
+  <documentation>Service definition of function ess__doShortSearch</documentation>
+  <input message="tns:doShortSearch"/>
+  <output message="tns:doShortSearchResponse"/>
+ </operation>
+ <operation name="getParam">
+  <documentation>Service definition of function ess__getParam</documentation>
+  <input message="tns:getParam"/>
+  <output message="tns:getParamResponse"/>
+ </operation>
+ <operation name="getStatsAccess">
+  <documentation>Service definition of function ess__getStatsAccess</documentation>
+  <input message="tns:getStatsAccess"/>
+  <output message="tns:getStatsAccessResponse"/>
+ </operation>
+ <operation name="getCachedPage">
+  <documentation>Service definition of function ess__getCachedPage</documentation>
+  <input message="tns:getCachedPage"/>
+  <output message="tns:getCachedPageResponse"/>
+ </operation>
+ <operation name="doQueryCompletion">
+  <documentation>Service definition of function ess__doQueryCompletion</documentation>
+  <input message="tns:doQueryCompletion"/>
+  <output message="tns:doQueryCompletionResponse"/>
+ </operation>
+ <operation name="doNotify">
+  <documentation>Service definition of function ess__doNotify</documentation>
+  <input message="tns:doNotify"/>
+  <output message="tns:doNotifyResponse"/>
+ </operation>
+ <operation name="doStatistics">
+  <documentation>Service definition of function ess__doStatistics</documentation>
+  <input message="tns:doStatistics"/>
+  <output message="tns:doStatisticsResponse"/>
+ </operation>
+ <operation name="doClick">
+  <documentation>Service definition of function ess__doClick</documentation>
+  <input message="tns:doClick"/>
+  <output message="tns:doClickResponse"/>
+ </operation>
+ <operation name="Ping">
+  <documentation>Service definition of function ess__Ping</documentation>
+  <input message="tns:PingRequest"/>
+  <output message="tns:PingResponse"/>
+ </operation>
+</portType>
+
+<binding name="SiteSeeker" type="tns:SiteSeekerPortType">
+ <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <operation name="doSearch">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="doShortSearch">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getParam">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getStatsAccess">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getCachedPage">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="doQueryCompletion">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="doNotify">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="doStatistics">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="doClick">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="Ping">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+</binding>
+
+<service name="SiteSeeker">
+ <documentation>Euroling SiteSeeker remote search service</documentation>
+ <port name="SiteSeeker" binding="tns:SiteSeeker">
+  <SOAP:address location="http://siteseeker-knowledgebase.siteseeker.se/ws/siteseeker-knowledgebase/"/>
+ </port>
+</service>
+
+</definitions>
